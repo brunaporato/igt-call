@@ -141,7 +141,6 @@ export function PrismaAdapter(
           type: account.type,
           provider: account.provider,
           provider_account_id: account.providerAccountId,
-          // TODO: entender esse erro
           refresh_token: account.refresh_token,
           access_token: account.access_token,
           expires_at: account.expires_at,
