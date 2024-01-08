@@ -8,8 +8,10 @@ import {
   CalendarTitle,
 } from './styles'
 import { getWeekDays } from '@/utils/get-week-days'
+import { useState } from 'react'
 
 export function Calendar() {
+  const [] = useState(new Date())
   const shortWeekDays = getWeekDays({ short: true })
 
   return (
