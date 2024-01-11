@@ -6,6 +6,9 @@ import Image from 'next/image'
 import { ClaimUsernameForm } from './components/ClaimUsernameForm'
 import { NextSeo } from 'next-seo'
 
+// TODO: thinking about implementing opengraph image using next-seo
+// vercel has a lib that generates graph images - look up
+
 export default function Home() {
   return (
     <>
