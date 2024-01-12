@@ -14,7 +14,7 @@ import { useQuery } from '@tanstack/react-query'
 
 interface Availability {
   possibleTimes: number[]
-  unavailableTimes: number[]
+  blockedTimes: { date: string }[]
 }
 
 interface CalendarStepProps {
@@ -47,16 +47,30 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
         },
       })
 
+      console.log(response)
+
       return response.data
     },
     enabled: !!selectedDate,
   })
 
-  const unavailableTimes = availability?.unavailableTimes.map(
-    (unavailableTime) => {
-      return dayjs(unavailableTime).get('hour')
-    },
-  )
+  const { possibleTimes, blockedTimes } = availability || {}
+
+  const availableTimes = possibleTimes?.filter((time) => {
+    const isTimeBlocked = blockedTimes?.some(
+      (blockedTime) => dayjs(blockedTime.date).hour() === time,
+    )
+
+    const isTimeInPast = dayjs(selectedDate).set('hour', time).isBefore(dayjs())
+
+    return !isTimeBlocked && !isTimeInPast
+  })
+
+  // const unavailableTimes = availability?.unavailableTimes.map(
+  //   (unavailableTime) => {
+  //     return dayjs(unavailableTime).get('hour')
+  //   },
+  // )
 
   function handleSelectTime(hour: number) {
     const dateWithTime = dayjs(selectedDate)
@@ -83,10 +97,7 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
                 <TimePickerItem
                   key={hour}
                   onClick={() => handleSelectTime(hour)}
-                  disabled={
-                    unavailableTimes?.includes(hour) ||
-                    dayjs(selectedDate).set('hour', hour).isBefore(new Date())
-                  }
+                  disabled={!availableTimes?.includes(hour)}
                 >
                   {String(hour).padStart(2, '0')}:00h
                 </TimePickerItem>
