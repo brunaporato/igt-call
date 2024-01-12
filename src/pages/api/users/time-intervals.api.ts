@@ -34,6 +34,20 @@ export default async function handler(
 
   const { intervals } = timeIntervalsBodySchema.parse(req.body)
 
+  const timeIntervalsSetInPast = await prisma.userTimeInterval.findMany({
+    where: {
+      user_id: session.user.id,
+    },
+  })
+
+  if (timeIntervalsSetInPast) {
+    await prisma.userTimeInterval.deleteMany({
+      where: {
+        user_id: session.user.id,
+      },
+    })
+  }
+
   await Promise.all(
     intervals.map((interval) => {
       return prisma.userTimeInterval.create({
