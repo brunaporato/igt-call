@@ -66,12 +66,6 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
     return !isTimeBlocked && !isTimeInPast
   })
 
-  // const unavailableTimes = availability?.unavailableTimes.map(
-  //   (unavailableTime) => {
-  //     return dayjs(unavailableTime).get('hour')
-  //   },
-  // )
-
   function handleSelectTime(hour: number) {
     const dateWithTime = dayjs(selectedDate)
       .set('hour', hour)

@@ -62,7 +62,7 @@ export default async function handle(
     },
   )
 
-  console.log(referenceDate)
+  console.log(referenceDate.endOf('day').toDate())
 
   const blockedTimes = await prisma.scheduling.findMany({
     select: {
@@ -71,8 +71,8 @@ export default async function handle(
     where: {
       user_id: user.id,
       date: {
-        gte: referenceDate.set('hour', startHour).toDate(),
-        lte: referenceDate.set('hour', endHour).toDate(),
+        gte: referenceDate.startOf('day').toDate(),
+        lte: referenceDate.endOf('day').toDate(),
       },
     },
   })
